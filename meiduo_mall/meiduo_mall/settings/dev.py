@@ -197,3 +197,6 @@ LOGGING = {
 # 单例设计模式 ---整个项目组 一个对象只有一份内存空间
 import logging
 logger = logging.getLogger('django')
+
+#注册user模型类 替换自带的
+AUTH_USER_MODEL = 'users.User'
