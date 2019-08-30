@@ -4,11 +4,11 @@ var vm = new Vue({
     delimiters: ['[[', ']]'],
 	data: {
 		host: host,
-		error_mobile: false,
+		error_phone: false,
 		error_password: false,
 		error_image_code: false,
 		error_sms_code: false,
-		error_mobile_message: '请输入正确的手机号码',
+		error_phone_message: '请输入正确的手机号码',
 		error_password_message: '请输入8-20位密码',
 		error_image_code_message: '请填写图形验证码',
 		error_sms_code_message: '请填写短信验证码',
@@ -23,13 +23,13 @@ var vm = new Vue({
 		mobile: '',
 		image_code: '',
 		sms_code: '',
-		openid:"",
+		// access_token: ''
 	},
 	mounted(){
 		// 生成图形验证码
 		this.generate_image_code();
-		// openid
-		// this.openid = openid;
+		// 初始化access_token
+		// this.access_token = access_token;
 	},
 	methods: {
 		// 生成一个图片验证码的编号，并设置页面中图片验证码img标签的src属性
@@ -40,17 +40,17 @@ var vm = new Vue({
 			this.image_code_url = this.host + "/image_codes/" + this.image_code_id + "/";
 		},
 		// 检查手机号
-		check_mobile(){
+		check_phone(){
 			var re = /^1[345789]\d{9}$/;
 			if(re.test(this.mobile)) {
-				this.error_mobile = false;
+				this.error_phone = false;
 			} else {
 				this.error_phone_message = '您输入的手机号格式不正确';
-				this.error_mobile = true;
+				this.error_phone = true;
 			}
 		},
 		// 检查密码
-		check_password(){
+		check_pwd(){
 			var re = /^[0-9A-Za-z]{8,20}$/;
 			if (re.test(this.password)) {
 				this.error_password = false;
@@ -87,7 +87,7 @@ var vm = new Vue({
 			this.check_phone();
 			this.check_image_code();
 
-			if (this.error_mobile == true || this.error_image_code == true) {
+			if (this.error_phone == true || this.error_image_code == true) {
 				this.sending_flag = false;
 				return;
 			}
@@ -136,11 +136,11 @@ var vm = new Vue({
 		},
 		// 绑定openid
 		on_submit(){
-			this.check_password();
-			this.check_mobile();
+			this.check_pwd();
+			this.check_phone();
 			this.check_sms_code();
 
-			if(this.error_password == true || this.error_mobile == true || this.error_sms_code == true) {
+			if(this.error_password == true || this.error_phone == true || this.error_sms_code == true) {
 				// 不满足条件：禁用表单
 				window.event.returnValue = false
 			}

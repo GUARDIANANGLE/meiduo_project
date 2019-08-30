@@ -43,17 +43,6 @@ INSTALLED_APPS = [
 
     # 注册子应用
     'apps.users',
-    'apps.contents',
-    'apps.verifications',
-    'apps.oauth',
-    'apps.areas',
-    'apps.goods',
-    'apps.carts',
-    'apps.orders',
-    'apps.payment',
-
-    # 注册第三方子应用
-    'haystack',
 ]
 
 MIDDLEWARE = [
@@ -146,35 +135,6 @@ CACHES = {
             "CLIENT_CLASS": "django_redis.client.DefaultClient",
         }
     },
-    # verify_image_code 存储 2号数据库
-    "verify_image_code": { # iamge_code
-        "BACKEND": "django_redis.cache.RedisCache",
-        "LOCATION": "redis://127.0.0.1:6379/2",
-        "OPTIONS": {
-            "CLIENT_CLASS": "django_redis.client.DefaultClient",
-        }
-    },
-    "sms_code": {  # 保存短信验证码--3号库
-        "BACKEND": "django_redis.cache.RedisCache",
-        "LOCATION": "redis://127.0.0.1:6379/3",
-        "OPTIONS": {
-            "CLIENT_CLASS": "django_redis.client.DefaultClient",
-        }
-    },
-    "history": { # 用户浏览记录 4号
-        "BACKEND": "django_redis.cache.RedisCache",
-        "LOCATION": "redis://127.0.0.1:6379/4",
-        "OPTIONS": {
-            "CLIENT_CLASS": "django_redis.client.DefaultClient",
-        }
-    },
-    "carts": {  # 购物车 5号
-        "BACKEND": "django_redis.cache.RedisCache",
-        "LOCATION": "redis://127.0.0.1:6379/5",
-        "OPTIONS": {
-            "CLIENT_CLASS": "django_redis.client.DefaultClient",
-        }
-    },
 }
 SESSION_ENGINE = "django.contrib.sessions.backends.cache"
 SESSION_CACHE_ALIAS = "session"
@@ -185,7 +145,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql', # 数据库引擎
         'HOST': '127.0.0.1', # 数据库主机
         'PORT': 3306, # 数据库端口
-        'USER': 'itm', # 数据库用户名
+        'USER': 'ydl', # 数据库用户名
         'PASSWORD': '123456', # 数据库用户密码
         'NAME': 'meiduo' # 数据库名字
     },
@@ -237,62 +197,3 @@ LOGGING = {
 # 单例设计模式 ---整个项目组 一个对象只有一份内存空间
 import logging
 logger = logging.getLogger('django')
-
-
-# 注册 User模型类 替换 系统自带的User模型类
-# AUTH_USER_MODEL = '子应用的名称.模型类的名字'
-AUTH_USER_MODEL = 'users.User'
-
-
-# 配置 登录路由
-LOGIN_URL = '/login/'
-
-# 指定自定义的用户认证后端
-AUTHENTICATION_BACKENDS = ['apps.users.utils.UsernameMobileAuthBackend']
-
-
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend' # 指定邮件后端
-EMAIL_HOST = 'smtp.163.com' # 发邮件主机
-EMAIL_PORT = 25 # 发邮件端口
-EMAIL_HOST_USER = 'hmmeiduo@163.com' # 授权的邮箱
-EMAIL_HOST_PASSWORD = 'hmmeiduo123' # 邮箱授权时获得的密码，非注册登录密码
-EMAIL_FROM = '美多商城<hmmeiduo@163.com>' # 发件人抬头
-EMAIL_ACTIVE_URL = 'http://www.meiduo.site:8000/emails/verification/' #激活地址
-
-
-# QQ
-QQ_CLIENT_ID = '101518219'
-QQ_CLIENT_SECRET = '418d84ebdc7241efb79536886ae95224'
-QQ_REDIRECT_URI = 'http://www.meiduo.site:8000/oauth_callback'
-
-
-
-# FDFS_BASE_URL = 'http://192.168.90.172:8888/'
-FDFS_BASE_URL = 'http://image.meiduo.site:8888/'
-# 告诉 项目 替换了 存储类
-DEFAULT_FILE_STORAGE = 'utils.fastdfs.fastdfs_storage.FastDFSStorage'
-
-
-# 配置 haystack 作为项目的 搜索引擎后端
-HAYSTACK_CONNECTIONS = {
-    'default': {
-        'ENGINE': 'haystack.backends.elasticsearch_backend.ElasticsearchSearchEngine',
-        'URL': 'http://192.168.90.172:9200/', # Elasticsearch服务器ip地址，端口号固定为9200
-        'INDEX_NAME': 'meiduo', # Elasticsearch建立的索引库的名称
-    },
-}
-
-# 当添加、修改、删除数据时，自动生成索引
-HAYSTACK_SIGNAL_PROCESSOR = 'haystack.signals.RealtimeSignalProcessor'
-
-# 设置 搜索结果 每页显示的个数
-HAYSTACK_SEARCH_RESULTS_PER_PAGE = 5
-
-
-# 支付宝的配置
-ALIPAY_APPID = '2016093000628757'
-ALIPAY_DEBUG = True
-ALIPAY_URL = 'https://openapi.alipaydev.com/gateway.do'
-ALIPAY_RETURN_URL = 'http://www.meiduo.site:8000/payment/status/'
-
-
