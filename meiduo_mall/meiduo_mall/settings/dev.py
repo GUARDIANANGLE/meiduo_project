@@ -43,6 +43,8 @@ INSTALLED_APPS = [
 
     # 注册子应用
     'apps.users',
+    'apps.contents',
+    'apps.verifications',
 ]
 
 MIDDLEWARE = [
@@ -135,6 +137,21 @@ CACHES = {
             "CLIENT_CLASS": "django_redis.client.DefaultClient",
         }
     },
+    # verify_image_code 存储 2号数据库
+    "verify_image_code": { # iamge_code
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": "redis://127.0.0.1:6379/2",
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient",
+        }
+    },
+    "sms_code": {  # 保存短信验证码--3号库
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": "redis://127.0.0.1:6379/3",
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient",
+        }
+    },
 }
 SESSION_ENGINE = "django.contrib.sessions.backends.cache"
 SESSION_CACHE_ALIAS = "session"
@@ -198,5 +215,7 @@ LOGGING = {
 import logging
 logger = logging.getLogger('django')
 
-#注册user模型类 替换自带的
+
+# 注册 User模型类 替换 系统自带的User模型类
+# AUTH_USER_MODEL = '子应用的名称.模型类的名字'
 AUTH_USER_MODEL = 'users.User'

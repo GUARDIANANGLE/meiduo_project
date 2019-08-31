@@ -26,4 +26,7 @@ urlpatterns = [
     # contents
     url(r'^', include('apps.contents.urls', namespace='contents')),
 
+    # verifications
+    url(r'^', include('apps.verifications.urls')),
+
 ]
