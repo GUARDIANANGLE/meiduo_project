@@ -23,6 +23,7 @@ urlpatterns = [
     url(r'^', include('apps.users.urls')),
 
 
-
+    # contents
+    url(r'^', include('apps.contents.urls', namespace='contents')),
 
 ]
